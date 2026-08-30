@@ -1,0 +1,381 @@
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace PLCCompare
+{
+    public class MainForm : Form
+    {
+        // Exposed as internal so FrameController (same project) can read/write them directly,
+        // mirroring the "protected" access used in the original Java version.
+        internal Label label1, label2, label3;
+        internal Label clockLabel;
+        internal PictureBox logo;
+        internal Label dateLabel;
+        internal Label received1, received2, received3, current1, current2, current3;
+        internal TextBox text1, text2, text3, text4, text5, text6;
+        internal Label match1, match2;
+        internal Label condition1, condition2;
+        internal Label scanning1, scanning2;
+        internal Label count1, count2;
+        internal Button reset;
+        internal Label status, deviceStatus;
+
+        private System.Windows.Forms.Timer clockTimer;
+
+        public MainForm()
+        {
+            AutoScaleMode = AutoScaleMode.None;
+
+            Text = "PLC";
+            Size = new Size(1500, 800);
+            StartPosition = FormStartPosition.CenterScreen;
+            FormBorderStyle = FormBorderStyle.Sizable;
+
+            // All controls are built here, in memory, BEFORE the form is ever shown.
+            // The form only becomes visible when Program.cs calls Application.Run(mainForm),
+            // so the interface always appears fully built — never blank/partial.
+
+            SetLogo();
+            SetLabel1();
+            SetLabel2();
+            SetLabel3();
+            SetDateLabel();
+            SetClockLabel();
+            StartClock();
+
+            SetReceived1();
+            SetCurrent1();
+            SetReceived2();
+            SetCurrent2();
+            SetReceived3();
+            SetCurrent3();
+
+            SetText1();
+            SetText2();
+            SetText3();
+            SetText4();
+            SetText5();
+            SetText6();
+
+            SetMatch1();
+            SetMatch2();
+            SetCondition1();
+            SetCondition2();
+
+            SetScanning1();
+            SetScanning2();
+            SetCount1();
+            SetCount2();
+
+            SetResetButton();
+            SetStatus();
+            SetDeviceStatus();
+        }
+
+        // Logo
+        private void SetLogo()
+        {
+            logo = new PictureBox();
+            logo.Image = Image.FromFile(@"C:\Barcode_Compare\IconWenglor.png");
+            logo.SizeMode = PictureBoxSizeMode.StretchImage;
+            logo.Bounds = new Rectangle(10, 5, 360, 120);
+            Controls.Add(logo);
+        }
+
+        // Batch No
+        private void SetLabel1()
+        {
+            label1 = new Label();
+            label1.Text = "Batch No";
+            label1.Font = new Font("Arial", 24, FontStyle.Bold);
+            label1.ForeColor = Color.Black;
+            label1.Bounds = new Rectangle(20, 200, 320, 30);
+            Controls.Add(label1);
+        }
+
+        // Rank 1
+        private void SetLabel2()
+        {
+            label2 = new Label();
+            label2.Text = "Rank 1";
+            label2.Font = new Font("Arial", 24, FontStyle.Bold);
+            label2.ForeColor = Color.Black;
+            label2.Bounds = new Rectangle(20, 370, 320, 30);
+            Controls.Add(label2);
+        }
+
+        // Rank 2
+        private void SetLabel3()
+        {
+            label3 = new Label();
+            label3.Text = "Rank 2";
+            label3.Font = new Font("Arial", 24, FontStyle.Bold);
+            label3.ForeColor = Color.Black;
+            label3.Bounds = new Rectangle(20, 540, 320, 30);
+            Controls.Add(label3);
+        }
+
+        // Date
+        private void SetDateLabel()
+        {
+            dateLabel = new Label();
+            dateLabel.Font = new Font("Arial", 35, FontStyle.Bold);
+            dateLabel.ForeColor = Color.Black;
+            dateLabel.Bounds = new Rectangle(20, 140, 400, 50);
+            Controls.Add(dateLabel);
+            UpdateDate();
+        }
+
+        internal void UpdateDate()
+        {
+            dateLabel.Text = DateTime.Now.ToString("ddd, dd/MM/yyyy");
+        }
+
+        // Time
+        private void SetClockLabel()
+        {
+            clockLabel = new Label();
+            clockLabel.Font = new Font("Arial", 35, FontStyle.Bold);
+            clockLabel.ForeColor = Color.Black;
+            clockLabel.Bounds = new Rectangle(440, 140, 320, 50);
+            Controls.Add(clockLabel);
+            UpdateTime();
+        }
+
+        internal void UpdateTime()
+        {
+            clockLabel.Text = DateTime.Now.ToString("HH:mm:ss");
+        }
+
+        // Equivalent of javax.swing.Timer — WinForms' Timer already fires its Tick
+        // event on the UI thread automatically, so no extra thread-safety wrapping is needed here.
+        private void StartClock()
+        {
+            clockTimer = new System.Windows.Forms.Timer();
+            clockTimer.Interval = 1000; // fires every 1000ms, same cadence as before
+            clockTimer.Tick += (s, e) => UpdateTime();
+            clockTimer.Start();
+        }
+
+        // Received Data 1
+        private void SetReceived1()
+        {
+            received1 = new Label();
+            received1.Text = "Received Data";
+            received1.Font = new Font("Arial", 18, FontStyle.Underline);
+            received1.Bounds = new Rectangle(23, 233, 300, 30);
+            Controls.Add(received1);
+        }
+
+        // Current Data 1
+        private void SetCurrent1()
+        {
+            current1 = new Label();
+            current1.Text = "Current Data";
+            current1.Font = new Font("Arial", 18, FontStyle.Underline);
+            current1.Bounds = new Rectangle(23, 298, 300, 30);
+            Controls.Add(current1);
+        }
+
+        // Received Data 2
+        private void SetReceived2()
+        {
+            received2 = new Label();
+            received2.Text = "Received Data";
+            received2.Font = new Font("Arial", 18, FontStyle.Underline);
+            received2.Bounds = new Rectangle(23, 403, 300, 30);
+            Controls.Add(received2);
+        }
+
+        // Current Data 2
+        private void SetCurrent2()
+        {
+            current2 = new Label();
+            current2.Text = "Current Data";
+            current2.Font = new Font("Arial", 18, FontStyle.Underline);
+            current2.Bounds = new Rectangle(23, 468, 300, 30);
+            Controls.Add(current2);
+        }
+
+        // Received Data 3
+        private void SetReceived3()
+        {
+            received3 = new Label();
+            received3.Text = "Received Data";
+            received3.Font = new Font("Arial", 18, FontStyle.Underline);
+            received3.Bounds = new Rectangle(23, 573, 300, 30);
+            Controls.Add(received3);
+        }
+
+        // Current Data 3
+        private void SetCurrent3()
+        {
+            current3 = new Label();
+            current3.Text = "Current Data";
+            current3.Font = new Font("Arial", 18, FontStyle.Underline);
+            current3.Bounds = new Rectangle(23, 638, 300, 30);
+            Controls.Add(current3);
+        }
+
+        // Shared helper — equivalent of your repeated setTextX() blocks
+        private TextBox MakeReadOnlyTextBox(Rectangle bounds)
+        {
+            var tb = new TextBox();
+            tb.Font = new Font("Arial", 18, FontStyle.Regular);
+            tb.ReadOnly = true;
+            tb.Bounds = bounds;
+            tb.BorderStyle = BorderStyle.FixedSingle;
+            Controls.Add(tb);
+            return tb;
+        }
+
+        private void SetText1() => text1 = MakeReadOnlyTextBox(new Rectangle(28, 263, 350, 30));
+        private void SetText2() => text2 = MakeReadOnlyTextBox(new Rectangle(28, 328, 350, 30));
+        private void SetText3() => text3 = MakeReadOnlyTextBox(new Rectangle(28, 433, 350, 30));
+        private void SetText4() => text4 = MakeReadOnlyTextBox(new Rectangle(28, 498, 350, 30));
+        private void SetText5() => text5 = MakeReadOnlyTextBox(new Rectangle(28, 603, 350, 30));
+        private void SetText6() => text6 = MakeReadOnlyTextBox(new Rectangle(28, 668, 350, 30));
+
+        // Match 1
+        private void SetMatch1()
+        {
+            match1 = new Label();
+            match1.Text = "Match";
+            match1.Font = new Font("Arial", 24, FontStyle.Bold);
+            match1.ForeColor = Color.Black;
+            match1.Bounds = new Rectangle(1000, 380, 320, 30);
+            Controls.Add(match1);
+        }
+
+        // Match 2
+        private void SetMatch2()
+        {
+            match2 = new Label();
+            match2.Text = "Match";
+            match2.Font = new Font("Arial", 24, FontStyle.Bold);
+            match2.ForeColor = Color.Black;
+            match2.Bounds = new Rectangle(1000, 550, 320, 30);
+            Controls.Add(match2);
+        }
+
+        // Condition 1
+        private void SetCondition1() {
+            var panel = new Panel();
+            panel.Bounds = new Rectangle(1005, 420, 100, 100);
+            panel.Padding = new Padding(2); // matches the border thickness below
+            panel.Paint += (s, e) =>
+            {
+                using (var pen = new Pen(Color.Black, 3))
+                {
+                    e.Graphics.DrawRectangle(pen, 1, 1, panel.Width - 3, panel.Height - 3);
+                }
+            };
+            Controls.Add(panel);
+
+            condition1 = new Label();
+            condition1.Font = new Font("Arial", 32, FontStyle.Bold);
+            condition1.TextAlign = ContentAlignment.MiddleCenter;
+            condition1.BorderStyle = BorderStyle.None; // panel now draws the border instead
+            condition1.BackColor = Color.White;
+            
+            panel.Controls.Add(condition1);
+            condition1.Dock = DockStyle.Fill;
+        }
+
+        // Condition 2
+        private void SetCondition2() {
+            var panel = new Panel();
+            panel.Bounds = new Rectangle(1005, 590, 100, 100);
+            panel.Padding = new Padding(2);
+            panel.Paint += (s, e) =>
+            {
+                using (var pen = new Pen(Color.Black, 3))
+                {
+                    e.Graphics.DrawRectangle(pen, 1, 1, panel.Width - 3, panel.Height - 3);
+                }
+            };
+            Controls.Add(panel);
+
+            condition2 = new Label();
+            condition2.Font = new Font("Arial", 32, FontStyle.Bold);
+            condition2.TextAlign = ContentAlignment.MiddleCenter;
+            condition2.BorderStyle = BorderStyle.None;
+            condition2.BackColor = Color.White;
+            
+            panel.Controls.Add(condition2);
+            condition2.Dock = DockStyle.Fill;
+        }
+
+        // Scanning 1
+        private void SetScanning1()
+        {
+            scanning1 = new Label();
+            scanning1.Text = "Total Scanning";
+            scanning1.Font = new Font("Arial", 18, FontStyle.Underline);
+            scanning1.Bounds = new Rectangle(400, 10, 200, 30);
+            Controls.Add(scanning1);
+        }
+
+        // Scanning 2
+        private void SetScanning2()
+        {
+            scanning2 = new Label();
+            scanning2.Text = "Total Scanning";
+            scanning2.Font = new Font("Arial", 18, FontStyle.Underline);
+            scanning2.Bounds = new Rectangle(1000, 10, 200, 30);
+            Controls.Add(scanning2);
+        }
+
+        // Count after compare Batch No and Rank 1
+        private void SetCount1()
+        {
+            count1 = new Label();
+            count1.Text = "0";
+            count1.Font = new Font("Arial", 60, FontStyle.Bold);
+            count1.Bounds = new Rectangle(440, 30, 200, 100);
+            Controls.Add(count1);
+        }
+
+        // Count after compare Batch No and Rank 2
+        private void SetCount2()
+        {
+            count2 = new Label();
+            count2.Text = "0";
+            count2.Font = new Font("Arial", 60, FontStyle.Bold);
+            count2.Bounds = new Rectangle(1040, 30, 200, 100);
+            Controls.Add(count2);
+        }
+
+        // Reset button — click handling is wired up in FrameController, not here,
+        // to keep this class UI-only (same split as the original Java version).
+        private void SetResetButton() {
+            reset = new Button();
+            reset.Text = "Reset";
+            reset.Font = new Font("Arial", 16, FontStyle.Bold);
+            reset.ForeColor = Color.Black;
+            reset.BackColor = Color.White;
+            reset.Bounds = new Rectangle(640, 55, 160, 50);
+            reset.TextAlign = ContentAlignment.MiddleCenter;
+            Controls.Add(reset);
+        }
+
+        // Status of COM port connection (open/failed)
+        private void SetStatus()
+        {
+            status = new Label();
+            status.Font = new Font("Arial", 12, FontStyle.Bold);
+            status.Bounds = new Rectangle(23, 710, 400, 20);
+            Controls.Add(status);
+        }
+
+        // Status of device connection (plugged in/detected)
+        private void SetDeviceStatus()
+        {
+            deviceStatus = new Label();
+            deviceStatus.Font = new Font("Arial", 12, FontStyle.Bold);
+            deviceStatus.Bounds = new Rectangle(23, 730, 400, 20);
+            Controls.Add(deviceStatus);
+        }
+    }
+}
