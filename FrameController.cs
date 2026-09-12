@@ -62,7 +62,6 @@ namespace PLCCompare
 
             ConnectionStatus(); // Status of COM port
             StartPortRetryTimer();
-            StartDeviceDetectionTimer();
         }
 
         // ---------- Function 1: Batch No ----------
@@ -486,67 +485,6 @@ namespace PLCCompare
             });
         }
 
-        // Recheck whether the COM port is connected to a device
-        private void StartDeviceDetectionTimer()
-        {
-            var deviceCheckTimer = new System.Windows.Forms.Timer { Interval = 1000 };
-            deviceCheckTimer.Tick += (s, e) => UpdateDeviceConnectionStatus();
-            deviceCheckTimer.Start();
-        }
-
-        // Show connected device on COM port (via DSR signal line)
-        private void UpdateDeviceConnectionStatus()
-        {
-            List<SerialPort> portsCopy;
-            lock (portListLock)
-            {
-                portsCopy = new List<SerialPort>(openPorts);
-            }
-
-            if (portsCopy.Count == 0)
-            {
-                ui.deviceStatus.Text = "No devices detected";
-                ui.deviceStatus.ForeColor = Color.Red;
-                return;
-            }
-
-            var devicePresent = new List<string>();
-            var deviceMissing = new List<string>();
-            long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-
-            foreach (SerialPort port in portsCopy)
-            {
-                bool recentlyActive = lastTimeByPort.TryGetValue(port.PortName, out long lastTime)
-                                    && (now - lastTime) < 60000; // active within the last 60 seconds
-
-                if (recentlyActive)
-                {
-                    devicePresent.Add(port.PortName);
-                }
-                else
-                {
-                    deviceMissing.Add(port.PortName);
-                }
-            }
-
-            if (deviceMissing.Count == 0)
-            {
-                ui.deviceStatus.Text = "Recently active: " + string.Join(",", devicePresent);
-                ui.deviceStatus.ForeColor = Color.Green;
-            }
-            else if (devicePresent.Count == 0)
-            {
-                ui.deviceStatus.Text = "No recent scans on: " + string.Join(",", deviceMissing);
-                ui.deviceStatus.ForeColor = Color.DarkGray;
-            }
-            else
-            {
-                ui.deviceStatus.Text = "Recently active: " + string.Join(",", devicePresent)
-                        + " | No recent scans: " + string.Join(",", deviceMissing);
-                ui.deviceStatus.ForeColor = Color.DarkGray;
-            }
-        }
-
 
         // Timer to recheck the status of failed COM port connections.
         // IMPROVEMENT carried over from our recent Java lag-debugging: the actual retry work
@@ -626,15 +564,23 @@ namespace PLCCompare
             return true;
         }
 
-        private void SetupClosePortsOnExit()
+       private void SetupClosePortsOnExit()
         {
-            // Equivalent of Java's WindowAdapter.windowClosing — but improved the same way
-            // we fixed the Java version's shutdown lag: hide the window immediately, then do
-            // the actual port/file cleanup on a background thread before truly exiting.
             ui.FormClosing += (s, e) =>
             {
-                e.Cancel = true; // pause the close briefly so we can clean up first
-                ui.Hide();       // window disappears instantly — no visible lag
+                e.Cancel = true;
+                ui.Hide();
+
+                // Watchdog: guarantees the process actually terminates even if cleanup
+                // hangs — a known issue with SerialPort.Close() when a background thread
+                // is still blocked inside a read call on that same port.
+                var watchdog = new Thread(() =>
+                {
+                    Thread.Sleep(3000);
+                    Environment.Exit(0); // force-kill if graceful cleanup hasn't finished by now
+                });
+             watchdog.IsBackground = true;
+                watchdog.Start();
 
                 var cleanupThread = new Thread(() =>
                 {
@@ -646,16 +592,24 @@ namespace PLCCompare
 
                     foreach (SerialPort port in portsCopy)
                     {
-                        if (port.IsOpen)
+                        try
                         {
-                            port.Close();
+                            if (port.IsOpen)
+                            {
+                                port.Close();
+                            }
+                        }
+                        catch
+                        {
+                            // ignore — the watchdog above will force-terminate if this hangs
                         }
                     }
-                    plc.Close();
-                    rank1DataLogger.Close();
-                    rank2DataLogger.Close();
 
-                    Application.Exit(); // now actually terminate the app
+                    try { plc.Close(); } catch { }
+                    try { rank1DataLogger.Close(); } catch { }
+                    try { rank2DataLogger.Close(); } catch { }
+
+                    Environment.Exit(0); // guaranteed termination once cleanup actually finishes
                 });
                 cleanupThread.IsBackground = true;
                 cleanupThread.Start();

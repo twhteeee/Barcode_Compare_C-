@@ -27,14 +27,10 @@ namespace PLCCompare
         {
             AutoScaleMode = AutoScaleMode.None;
 
-            Text = "PLC";
+            Text = "Wenglor Barcode Logging System";
             Size = new Size(1500, 800);
             StartPosition = FormStartPosition.CenterScreen;
             FormBorderStyle = FormBorderStyle.Sizable;
-
-            // All controls are built here, in memory, BEFORE the form is ever shown.
-            // The form only becomes visible when Program.cs calls Application.Run(mainForm),
-            // so the interface always appears fully built — never blank/partial.
 
             SetLogo();
             SetLabel1();
@@ -70,7 +66,6 @@ namespace PLCCompare
 
             SetResetButton();
             SetStatus();
-            SetDeviceStatus();
         }
 
         // Logo
@@ -79,7 +74,7 @@ namespace PLCCompare
             logo = new PictureBox();
             logo.Image = Image.FromFile(@"C:\Barcode_Compare\IconWenglor.png");
             logo.SizeMode = PictureBoxSizeMode.StretchImage;
-            logo.Bounds = new Rectangle(10, 5, 360, 120);
+            logo.Bounds = new Rectangle(25, 5, 420, 80);
             Controls.Add(logo);
         }
 
@@ -90,7 +85,7 @@ namespace PLCCompare
             label1.Text = "Batch No";
             label1.Font = new Font("Arial", 24, FontStyle.Bold);
             label1.ForeColor = Color.Black;
-            label1.Bounds = new Rectangle(20, 200, 320, 30);
+            label1.Bounds = new Rectangle(20, 180, 320, 30);
             Controls.Add(label1);
         }
 
@@ -101,7 +96,7 @@ namespace PLCCompare
             label2.Text = "Rank 1";
             label2.Font = new Font("Arial", 24, FontStyle.Bold);
             label2.ForeColor = Color.Black;
-            label2.Bounds = new Rectangle(20, 370, 320, 30);
+            label2.Bounds = new Rectangle(20, 375, 320, 30);
             Controls.Add(label2);
         }
 
@@ -112,7 +107,7 @@ namespace PLCCompare
             label3.Text = "Rank 2";
             label3.Font = new Font("Arial", 24, FontStyle.Bold);
             label3.ForeColor = Color.Black;
-            label3.Bounds = new Rectangle(20, 540, 320, 30);
+            label3.Bounds = new Rectangle(20, 575, 320, 30);
             Controls.Add(label3);
         }
 
@@ -120,9 +115,9 @@ namespace PLCCompare
         private void SetDateLabel()
         {
             dateLabel = new Label();
-            dateLabel.Font = new Font("Arial", 35, FontStyle.Bold);
+            dateLabel.Font = new Font("Arial", 20, FontStyle.Bold);
             dateLabel.ForeColor = Color.Black;
-            dateLabel.Bounds = new Rectangle(20, 140, 400, 50);
+            dateLabel.Bounds = new Rectangle(20, 140, 250, 50);
             Controls.Add(dateLabel);
             UpdateDate();
         }
@@ -136,9 +131,9 @@ namespace PLCCompare
         private void SetClockLabel()
         {
             clockLabel = new Label();
-            clockLabel.Font = new Font("Arial", 35, FontStyle.Bold);
+            clockLabel.Font = new Font("Arial", 20, FontStyle.Bold);
             clockLabel.ForeColor = Color.Black;
-            clockLabel.Bounds = new Rectangle(440, 140, 320, 50);
+            clockLabel.Bounds = new Rectangle(330, 140, 200, 50);
             Controls.Add(clockLabel);
             UpdateTime();
         }
@@ -164,7 +159,7 @@ namespace PLCCompare
             received1 = new Label();
             received1.Text = "Received Data";
             received1.Font = new Font("Arial", 18, FontStyle.Underline);
-            received1.Bounds = new Rectangle(23, 233, 300, 30);
+            received1.Bounds = new Rectangle(23, 213, 300, 30);
             Controls.Add(received1);
         }
 
@@ -174,7 +169,7 @@ namespace PLCCompare
             current1 = new Label();
             current1.Text = "Current Data";
             current1.Font = new Font("Arial", 18, FontStyle.Underline);
-            current1.Bounds = new Rectangle(23, 298, 300, 30);
+            current1.Bounds = new Rectangle(23, 290, 300, 30);
             Controls.Add(current1);
         }
 
@@ -184,7 +179,7 @@ namespace PLCCompare
             received2 = new Label();
             received2.Text = "Received Data";
             received2.Font = new Font("Arial", 18, FontStyle.Underline);
-            received2.Bounds = new Rectangle(23, 403, 300, 30);
+            received2.Bounds = new Rectangle(23, 408, 300, 30);
             Controls.Add(received2);
         }
 
@@ -194,7 +189,7 @@ namespace PLCCompare
             current2 = new Label();
             current2.Text = "Current Data";
             current2.Font = new Font("Arial", 18, FontStyle.Underline);
-            current2.Bounds = new Rectangle(23, 468, 300, 30);
+            current2.Bounds = new Rectangle(23, 485, 300, 30);
             Controls.Add(current2);
         }
 
@@ -204,7 +199,7 @@ namespace PLCCompare
             received3 = new Label();
             received3.Text = "Received Data";
             received3.Font = new Font("Arial", 18, FontStyle.Underline);
-            received3.Bounds = new Rectangle(23, 573, 300, 30);
+            received3.Bounds = new Rectangle(23, 605, 300, 30);
             Controls.Add(received3);
         }
 
@@ -214,7 +209,7 @@ namespace PLCCompare
             current3 = new Label();
             current3.Text = "Current Data";
             current3.Font = new Font("Arial", 18, FontStyle.Underline);
-            current3.Bounds = new Rectangle(23, 638, 300, 30);
+            current3.Bounds = new Rectangle(23, 682, 300, 30);
             Controls.Add(current3);
         }
 
@@ -222,7 +217,7 @@ namespace PLCCompare
         private TextBox MakeReadOnlyTextBox(Rectangle bounds)
         {
             var tb = new TextBox();
-            tb.Font = new Font("Arial", 18, FontStyle.Regular);
+            tb.Font = new Font("Arial", 24, FontStyle.Regular);
             tb.ReadOnly = true;
             tb.Bounds = bounds;
             tb.BorderStyle = BorderStyle.FixedSingle;
@@ -230,12 +225,12 @@ namespace PLCCompare
             return tb;
         }
 
-        private void SetText1() => text1 = MakeReadOnlyTextBox(new Rectangle(28, 263, 350, 30));
-        private void SetText2() => text2 = MakeReadOnlyTextBox(new Rectangle(28, 328, 350, 30));
-        private void SetText3() => text3 = MakeReadOnlyTextBox(new Rectangle(28, 433, 350, 30));
-        private void SetText4() => text4 = MakeReadOnlyTextBox(new Rectangle(28, 498, 350, 30));
-        private void SetText5() => text5 = MakeReadOnlyTextBox(new Rectangle(28, 603, 350, 30));
-        private void SetText6() => text6 = MakeReadOnlyTextBox(new Rectangle(28, 668, 350, 30));
+        private void SetText1() => text1 = MakeReadOnlyTextBox(new Rectangle(28, 243, 400, 50));
+        private void SetText2() => text2 = MakeReadOnlyTextBox(new Rectangle(28, 320, 400, 50));
+        private void SetText3() => text3 = MakeReadOnlyTextBox(new Rectangle(28, 438, 400, 50));
+        private void SetText4() => text4 = MakeReadOnlyTextBox(new Rectangle(28, 515, 400, 50));
+        private void SetText5() => text5 = MakeReadOnlyTextBox(new Rectangle(28, 635, 400, 50));
+        private void SetText6() => text6 = MakeReadOnlyTextBox(new Rectangle(28, 712, 400, 50));
 
         // Match 1
         private void SetMatch1()
@@ -255,7 +250,7 @@ namespace PLCCompare
             match2.Text = "Match";
             match2.Font = new Font("Arial", 24, FontStyle.Bold);
             match2.ForeColor = Color.Black;
-            match2.Bounds = new Rectangle(1000, 550, 320, 30);
+            match2.Bounds = new Rectangle(1000, 580, 320, 30);
             Controls.Add(match2);
         }
 
@@ -286,7 +281,7 @@ namespace PLCCompare
         // Condition 2
         private void SetCondition2() {
             var panel = new Panel();
-            panel.Bounds = new Rectangle(1005, 590, 100, 100);
+            panel.Bounds = new Rectangle(1005, 620, 100, 100);
             panel.Padding = new Padding(2);
             panel.Paint += (s, e) =>
             {
@@ -311,9 +306,9 @@ namespace PLCCompare
         private void SetScanning1()
         {
             scanning1 = new Label();
-            scanning1.Text = "Total Scanning";
+            scanning1.Text = "Rank 1 Counter";
             scanning1.Font = new Font("Arial", 18, FontStyle.Underline);
-            scanning1.Bounds = new Rectangle(400, 10, 200, 30);
+            scanning1.Bounds = new Rectangle(550, 10, 200, 30);
             Controls.Add(scanning1);
         }
 
@@ -321,7 +316,7 @@ namespace PLCCompare
         private void SetScanning2()
         {
             scanning2 = new Label();
-            scanning2.Text = "Total Scanning";
+            scanning2.Text = "Rank 2 Counter";
             scanning2.Font = new Font("Arial", 18, FontStyle.Underline);
             scanning2.Bounds = new Rectangle(1000, 10, 200, 30);
             Controls.Add(scanning2);
@@ -333,7 +328,7 @@ namespace PLCCompare
             count1 = new Label();
             count1.Text = "0";
             count1.Font = new Font("Arial", 60, FontStyle.Bold);
-            count1.Bounds = new Rectangle(440, 30, 200, 100);
+            count1.Bounds = new Rectangle(595, 30, 200, 100);
             Controls.Add(count1);
         }
 
@@ -343,7 +338,7 @@ namespace PLCCompare
             count2 = new Label();
             count2.Text = "0";
             count2.Font = new Font("Arial", 60, FontStyle.Bold);
-            count2.Bounds = new Rectangle(1040, 30, 200, 100);
+            count2.Bounds = new Rectangle(1045, 30, 200, 100);
             Controls.Add(count2);
         }
 
@@ -351,11 +346,11 @@ namespace PLCCompare
         // to keep this class UI-only (same split as the original Java version).
         private void SetResetButton() {
             reset = new Button();
-            reset.Text = "Reset";
+            reset.Text = "RESET";
             reset.Font = new Font("Arial", 16, FontStyle.Bold);
             reset.ForeColor = Color.Black;
             reset.BackColor = Color.White;
-            reset.Bounds = new Rectangle(640, 55, 160, 50);
+            reset.Bounds = new Rectangle(555, 130, 160, 50);
             reset.TextAlign = ContentAlignment.MiddleCenter;
             Controls.Add(reset);
         }
@@ -365,17 +360,8 @@ namespace PLCCompare
         {
             status = new Label();
             status.Font = new Font("Arial", 12, FontStyle.Bold);
-            status.Bounds = new Rectangle(23, 710, 400, 20);
+            status.Bounds = new Rectangle(25, 90, 400, 20);
             Controls.Add(status);
-        }
-
-        // Status of device connection (plugged in/detected)
-        private void SetDeviceStatus()
-        {
-            deviceStatus = new Label();
-            deviceStatus.Font = new Font("Arial", 12, FontStyle.Bold);
-            deviceStatus.Bounds = new Rectangle(23, 730, 400, 20);
-            Controls.Add(deviceStatus);
         }
     }
 }
