@@ -62,6 +62,7 @@ namespace PLCCompare
 
             ConnectionStatus(); // Status of COM port
             StartPortRetryTimer();
+            StartPlcStatusTimer();
         }
 
         // ---------- Function 1: Batch No ----------
@@ -104,6 +105,7 @@ namespace PLCCompare
                 FlashCondition(ui.condition1, status, Color.Green);
                 TriggerRank1Output(isMatch);
                 plc.WritePlcWordAscii("D", 20, rank1, 20);
+                plc.WritePlcWordAscii("D",80, status, 3);
             }
             else
             {
@@ -112,6 +114,7 @@ namespace PLCCompare
                 FlashCondition(ui.condition1, status, Color.Red);
                 TriggerRank1Output(isMatch);
                 plc.WritePlcWordAscii("D", 20, rank1, 20);
+                plc.WritePlcWordAscii("D",80, status, 3);
             }
 
             count1++;
@@ -135,18 +138,19 @@ namespace PLCCompare
         private void CompareRank2()
         {
             string batchNo = ui.text2.Text;
-            String truncateBatchNo = batchNo.Substring(0, batchNo.Length - 3);
+            String truncateBatchNo = batchNo.Length > 5 ? batchNo.Substring(0, batchNo.Length - 3) : batchNo;
             string rank2 = ui.text6.Text;
-            String truncateRank2 = rank2.Substring(0, rank2.Length - 3);
+            String truncateRank2 = rank2.Length > 5 ? rank2.Substring(0, rank2.Length - 3) : rank2;
             string status;
             bool isMatch = truncateBatchNo == truncateRank2;
 
-            if (truncateBatchNo == truncateRank2)
+            if (isMatch)
             {
                 status = "OK";
                 FlashCondition(ui.condition2, status, Color.Green);
                 TriggerRank2Output(isMatch);
                 plc.WritePlcWordAscii("D", 40, rank2, 20);
+                plc.WritePlcWordAscii("D",86, status, 3);
             }
             else
             {
@@ -154,6 +158,7 @@ namespace PLCCompare
                 FlashCondition(ui.condition2, status, Color.Red);
                 TriggerRank2Output(isMatch);
                 plc.WritePlcWordAscii("D", 40, rank2, 20);
+                plc.WritePlcWordAscii("D",86, status, 3);
             }
 
             count2++;
@@ -552,13 +557,24 @@ namespace PLCCompare
         }
 
         // Rank 1 and 2 cannot have a value before Batch No is scanned
+        private int batchNoWarningVisible = 0; // 0 = not showing, 1 = currently showing
+
         private bool IsBatchNoScanned()
         {
             string batchNo = ui.text2.Text;
             if (string.IsNullOrWhiteSpace(batchNo))
             {
-                SafeInvoke(ui, () =>
-                    MessageBox.Show(ui, "Batch No cannot be blank", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning));
+                // Atomically check-and-set: only the thread that successfully flips
+                // 0 -> 1 gets to show the dialog. Any other thread calling this while
+                // one is already open just sees 1 and skips showing a second one.
+                if (Interlocked.CompareExchange(ref batchNoWarningVisible, 1, 0) == 0)
+                {
+                    SafeInvoke(ui, () =>
+                    {
+                        MessageBox.Show(ui, "Batch No cannot be blank", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        Interlocked.Exchange(ref batchNoWarningVisible, 0); // reset once the user closes it
+                    });
+                }
                 return false;
             }
             return true;
@@ -614,6 +630,28 @@ namespace PLCCompare
                 cleanupThread.IsBackground = true;
                 cleanupThread.Start();
             };
+        }
+
+        // Check PLC Status
+        private void StartPlcStatusTimer()
+        {
+            var plcStatusTimer = new System.Windows.Forms.Timer { Interval = 1000 };
+            plcStatusTimer.Tick += (s, e) => UpdatePlcStatus();
+            plcStatusTimer.Start();
+        }
+
+        private void UpdatePlcStatus()
+        {
+            if (plc.IsConnected)
+            {
+                ui.plcStatus.Text = "PLC is connected";
+                ui.plcStatus.ForeColor = Color.Green;
+            }
+            else
+            {
+                ui.plcStatus.Text = "PLC is not connected";
+                ui.plcStatus.ForeColor = Color.Red;
+            }
         }
     }
 }

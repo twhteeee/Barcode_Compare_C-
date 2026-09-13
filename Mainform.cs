@@ -19,7 +19,8 @@ namespace PLCCompare
         internal Label scanning1, scanning2;
         internal Label count1, count2;
         internal Button reset;
-        internal Label status, deviceStatus;
+        internal Label status;
+        internal Label plcStatus;
 
         private System.Windows.Forms.Timer clockTimer;
 
@@ -66,6 +67,7 @@ namespace PLCCompare
 
             SetResetButton();
             SetStatus();
+            SetPlcStatus();
         }
 
         // Logo
@@ -239,7 +241,7 @@ namespace PLCCompare
             match1.Text = "Match";
             match1.Font = new Font("Arial", 24, FontStyle.Bold);
             match1.ForeColor = Color.Black;
-            match1.Bounds = new Rectangle(1000, 380, 320, 30);
+            match1.Bounds = new Rectangle(1040, 380, 320, 30);
             Controls.Add(match1);
         }
 
@@ -250,14 +252,14 @@ namespace PLCCompare
             match2.Text = "Match";
             match2.Font = new Font("Arial", 24, FontStyle.Bold);
             match2.ForeColor = Color.Black;
-            match2.Bounds = new Rectangle(1000, 580, 320, 30);
+            match2.Bounds = new Rectangle(1040, 580, 320, 30);
             Controls.Add(match2);
         }
 
         // Condition 1
         private void SetCondition1() {
             var panel = new Panel();
-            panel.Bounds = new Rectangle(1005, 420, 100, 100);
+            panel.Bounds = new Rectangle(1045, 420, 100, 100);
             panel.Padding = new Padding(2); // matches the border thickness below
             panel.Paint += (s, e) =>
             {
@@ -281,7 +283,7 @@ namespace PLCCompare
         // Condition 2
         private void SetCondition2() {
             var panel = new Panel();
-            panel.Bounds = new Rectangle(1005, 620, 100, 100);
+            panel.Bounds = new Rectangle(1045, 620, 100, 100);
             panel.Padding = new Padding(2);
             panel.Paint += (s, e) =>
             {
@@ -362,6 +364,15 @@ namespace PLCCompare
             status.Font = new Font("Arial", 12, FontStyle.Bold);
             status.Bounds = new Rectangle(25, 90, 400, 20);
             Controls.Add(status);
+        }
+
+        // Status of PLC connection
+        private void SetPlcStatus()
+        {
+            plcStatus = new Label();
+            plcStatus.Font = new Font("Arial", 12, FontStyle.Bold);
+            plcStatus.Bounds = new Rectangle(25, 115, 400, 20);
+            Controls.Add(plcStatus);
         }
     }
 }

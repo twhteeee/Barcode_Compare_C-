@@ -90,6 +90,13 @@ namespace PLCCompare
                         // connection periodically, so a silently-dead peer (cable pull,
                         // PLC power loss) gets detected instead of looking "connected" forever.
                         client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+
+                        // Customize the keepalive timing so a hard disconnect (cable pull, power loss) in few second
+                        byte[] keepAliveValues = new byte[12];
+                        BitConverter.GetBytes(1).CopyTo(keepAliveValues, 0);    // enable
+                        BitConverter.GetBytes(1000).CopyTo(keepAliveValues, 4); // time before first probe (ms)
+                        BitConverter.GetBytes(1000).CopyTo(keepAliveValues, 8); // interval between probes (ms)
+                        client.Client.IOControl(IOControlCode.KeepAliveValues, keepAliveValues, null);
                         Log("Connected to PLC.");
                     }
                     else
