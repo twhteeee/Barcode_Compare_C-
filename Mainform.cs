@@ -258,16 +258,38 @@ namespace PLCCompare
             Controls.Add(current3);
         }
 
-        // Shared helper — equivalent of your repeated setTextX() blocks
+        // Shared helper — equivalent of your repeated setTextX() blocks.
+        // Wraps the textbox in a frame that paints a black sunken bevel (dark top/left,
+        // lighter bottom/right), since TextBox's own Fixed3D border can't be recolored.
         private TextBox MakeReadOnlyTextBox(Rectangle bounds)
         {
+            var frame = new Panel();
+            frame.Bounds = bounds;
+            frame.BackColor = Color.White;
+            frame.Padding = new Padding(2);
+            frame.Paint += (s, e) =>
+            {
+                var rect = new Rectangle(0, 0, frame.Width - 1, frame.Height - 1);
+                using (var darkPen = new Pen(Color.Black, 2))
+                {
+                    e.Graphics.DrawLine(darkPen, rect.Left, rect.Top, rect.Right, rect.Top);
+                    e.Graphics.DrawLine(darkPen, rect.Left, rect.Top, rect.Left, rect.Bottom);
+                }
+                using (var lightPen = new Pen(Color.FromArgb(90, 90, 90), 1))
+                {
+                    e.Graphics.DrawLine(lightPen, rect.Left, rect.Bottom, rect.Right, rect.Bottom);
+                    e.Graphics.DrawLine(lightPen, rect.Right, rect.Top, rect.Right, rect.Bottom);
+                }
+            };
+            Controls.Add(frame);
+
             var tb = new TextBox();
             tb.Font = new Font("Arial", 20, FontStyle.Regular);
             tb.ReadOnly = true;
-            tb.Bounds = bounds;
-            tb.BorderStyle = BorderStyle.FixedSingle;
+            tb.BorderStyle = BorderStyle.None;
             tb.Multiline = true;
-            Controls.Add(tb);
+            tb.Dock = DockStyle.Fill;
+            frame.Controls.Add(tb);
             return tb;
         }
 
