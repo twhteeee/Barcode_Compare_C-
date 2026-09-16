@@ -1,1 +1,33 @@
-git rm -r --cached bin obj
+# Build results
+bin/
+obj/
+
+# Publish output (this is what contained the 104 MB exe that got rejected)
+publish/
+*.publish.xml
+
+# Visual Studio / VS Code files
+.vs/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# NuGet
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+
+# User-specific files
+*.user
+*.suo
+
+# Config file — contains machine-specific COM ports / PLC IP that shouldn't
+# be shared across different deployment machines via source control
+config.json
+
+# Installer output
+Output/
+*.exe
+!installer.iss
