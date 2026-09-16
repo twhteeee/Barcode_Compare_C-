@@ -47,6 +47,9 @@ namespace PLCCompare
             rank1DataLogger = new DataLogger(@"C:\CompareResult", "Rank1");
             rank2DataLogger = new DataLogger(@"C:\CompareResult", "Rank2");
 
+            rank1DataLogger.OnFileError = ShowMissingLoggingFileWarning;
+            rank2DataLogger.OnFileError = ShowMissingLoggingFileWarning;
+
             WireResetButton();
             SetupClosePortsOnExit();
 
@@ -84,7 +87,7 @@ namespace PLCCompare
 
         private void OnRank1Received(string value)
         {
-            if (!IsBatchNoScanned())
+            if (!IsBatchNoScanned() || !IsPlcConnected())
             {
                 return; // Block the scan, no compare
             }
@@ -127,7 +130,7 @@ namespace PLCCompare
 
         private void OnRank2Received(string value)
         {
-            if (!IsBatchNoScanned())
+            if (!IsBatchNoScanned() || !IsPlcConnected())
             {
                 return; // Block the scan, no compare
             }
@@ -550,6 +553,21 @@ namespace PLCCompare
             ConnectionStatus(); // refresh the label after every retry attempt
         }
 
+        private int loggingFileWarningVisible = 0;
+
+        // Data Logger error pop out window
+        private void ShowMissingLoggingFileWarning()
+        {
+            if (Interlocked.CompareExchange(ref loggingFileWarningVisible, 1, 0) == 0)
+            {
+                SafeInvoke(ui, () =>
+                {
+                    MessageBox.Show(ui, "Missing logging File", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Interlocked.Exchange(ref loggingFileWarningVisible, 0);
+                });
+            }
+        }
+
          // Rank 1 and 2 cannot have a value before Batch No is scanned
         private int batchNoWarningVisible = 0; // 0 = not showing, 1 = currently showing
 
@@ -567,6 +585,26 @@ namespace PLCCompare
                     {
                         MessageBox.Show(ui, "Batch No cannot be blank", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         Interlocked.Exchange(ref batchNoWarningVisible, 0); // reset once the user closes it
+                    });
+                }
+                return false;
+            }
+            return true;
+        }
+
+        // Rank 1 and 2 cannot compare while the PLC is disconnected
+        private int plcWarningVisible = 0; // 0 = not showing, 1 = currently showing
+
+        private bool IsPlcConnected()
+        {
+            if (!plc.IsConnected)
+            {
+                if (Interlocked.CompareExchange(ref plcWarningVisible, 1, 0) == 0)
+                {
+                    SafeInvoke(ui, () =>
+                    {
+                        MessageBox.Show(ui, "Connect PLC to run the program", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        Interlocked.Exchange(ref plcWarningVisible, 0); // reset once the user closes it
                     });
                 }
                 return false;

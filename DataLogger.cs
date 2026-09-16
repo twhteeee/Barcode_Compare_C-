@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 
+
 namespace PLCCompare
 {
     public class DataLogger
@@ -9,6 +10,7 @@ namespace PLCCompare
         private readonly string subFolder;
         private DateTime currentDate;
         private StreamWriter output;
+        public Action OnFileError { get; set; }
 
         public DataLogger(string mainFolder, string subFolder)
         {
@@ -50,6 +52,7 @@ namespace PLCCompare
             catch (Exception ex)
             {
                 Console.WriteLine("Failed to open log file: " + ex.Message);
+                OnFileError?.Invoke();
             }
         }
 

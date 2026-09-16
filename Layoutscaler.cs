@@ -107,9 +107,8 @@ namespace PLCCompare
             // Centre the scaled canvas inside the client area so the extra space
             // is shared evenly instead of piling up on one side.
             int offsetX = (int)Math.Round((client.Width - designSize.Width * scale) / 2f);
-            int offsetY = (int)Math.Round((client.Height - designSize.Height * scale) / 2f);
+            int offsetY = 0; // pin content to the top instead of vertically centering
             if (offsetX < 0) offsetX = 0;
-            if (offsetY < 0) offsetY = 0;
 
             form.SuspendLayout();
             try

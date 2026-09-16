@@ -31,6 +31,7 @@ namespace PLCCompare
             AutoScaleMode = AutoScaleMode.None;
             DoubleBuffered = true; 
 
+            Icon = LoadEmbeddedIcon("AppIcon.ico");
             Text = "Wenglor Barcode Logging System";
             ClientSize = DesignSize;
             StartPosition = FormStartPosition.CenterScreen;
@@ -79,6 +80,22 @@ namespace PLCCompare
             Load += (s, e) => LayoutScaler.FitToScreen(this, DesignSize);
         }
 
+        // App Icon
+        private Icon LoadEmbeddedIcon(string fileName)
+        {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            string resourceName = assembly.GetName().Name + "." + fileName;
+
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    throw new Exception($"Embedded icon not found: {resourceName}");
+                }
+                return new Icon(stream);
+            }
+        }
+
         // Logo
         private void SetLogo()
         {
@@ -124,7 +141,7 @@ namespace PLCCompare
             label2.Text = "Rank 1";
             label2.Font = new Font("Arial", 24, FontStyle.Bold);
             label2.ForeColor = Color.Black;
-            label2.Bounds = new Rectangle(20, 380, 320, 33);
+            label2.Bounds = new Rectangle(20, 377, 320, 33);
             Controls.Add(label2);
         }
 
@@ -187,7 +204,7 @@ namespace PLCCompare
             received1 = new Label();
             received1.Text = "Received Data";
             received1.Font = new Font("Arial", 18, FontStyle.Underline);
-            received1.Bounds = new Rectangle(23, 213, 300, 30);
+            received1.Bounds = new Rectangle(23, 211, 300, 30);
             Controls.Add(received1);
         }
 
@@ -197,7 +214,7 @@ namespace PLCCompare
             current1 = new Label();
             current1.Text = "Current Data";
             current1.Font = new Font("Arial", 18, FontStyle.Underline);
-            current1.Bounds = new Rectangle(23, 295, 300, 30);
+            current1.Bounds = new Rectangle(23, 294, 300, 30);
             Controls.Add(current1);
         }
 
@@ -207,7 +224,7 @@ namespace PLCCompare
             received2 = new Label();
             received2.Text = "Received Data";
             received2.Font = new Font("Arial", 18, FontStyle.Underline);
-            received2.Bounds = new Rectangle(23, 413, 300, 30);
+            received2.Bounds = new Rectangle(23, 410, 300, 30);
             Controls.Add(received2);
         }
 
@@ -259,7 +276,7 @@ namespace PLCCompare
         private void SetText3() => text3 = MakeReadOnlyTextBox(new Rectangle(28, 443, 400, 50));
         private void SetText4() => text4 = MakeReadOnlyTextBox(new Rectangle(28, 525, 400, 50));
         private void SetText5() => text5 = MakeReadOnlyTextBox(new Rectangle(28, 643, 400, 50));
-        private void SetText6() => text6 = MakeReadOnlyTextBox(new Rectangle(28, 724, 400, 50));
+        private void SetText6() => text6 = MakeReadOnlyTextBox(new Rectangle(28, 727, 400, 50));
 
         // Match 1
         private void SetMatch1()

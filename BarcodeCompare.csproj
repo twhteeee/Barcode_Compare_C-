@@ -6,11 +6,13 @@
     <Nullable>disable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.IO.Ports" Version="10.0.11" />
     <EmbeddedResource Include="IconWenglor.png" />
+    <EmbeddedResource Include="AppIcon.ico" />
   </ItemGroup>
 
 </Project>
