@@ -128,9 +128,9 @@ namespace PLCCompare
         {
             label1 = new Label();
             label1.Text = "Batch No";
-            label1.Font = new Font("Arial", 24, FontStyle.Bold);
+            label1.Font = new Font("Arial", 18, FontStyle.Bold);
             label1.ForeColor = Color.Black;
-            label1.Bounds = new Rectangle(20, 175, 320, 33);
+            label1.Bounds = new Rectangle(50, 175, 320, 33);
             Controls.Add(label1);
         }
 
@@ -139,9 +139,9 @@ namespace PLCCompare
         {
             label2 = new Label();
             label2.Text = "Rank 1";
-            label2.Font = new Font("Arial", 24, FontStyle.Bold);
+            label2.Font = new Font("Arial", 18, FontStyle.Bold);
             label2.ForeColor = Color.Black;
-            label2.Bounds = new Rectangle(20, 377, 320, 33);
+            label2.Bounds = new Rectangle(50, 393, 320, 33);
             Controls.Add(label2);
         }
 
@@ -150,9 +150,9 @@ namespace PLCCompare
         {
             label3 = new Label();
             label3.Text = "Rank 2";
-            label3.Font = new Font("Arial", 24, FontStyle.Bold);
+            label3.Font = new Font("Arial", 18, FontStyle.Bold);
             label3.ForeColor = Color.Black;
-            label3.Bounds = new Rectangle(20, 578, 320, 33);
+            label3.Bounds = new Rectangle(50, 600, 320, 33);
             Controls.Add(label3);
         }
 
@@ -203,8 +203,8 @@ namespace PLCCompare
         {
             received1 = new Label();
             received1.Text = "Received Data";
-            received1.Font = new Font("Arial", 18, FontStyle.Underline);
-            received1.Bounds = new Rectangle(23, 211, 300, 30);
+            received1.Font = new Font("Arial", 14, FontStyle.Underline);
+            received1.Bounds = new Rectangle(50, 211, 300, 30);
             Controls.Add(received1);
         }
 
@@ -213,8 +213,8 @@ namespace PLCCompare
         {
             current1 = new Label();
             current1.Text = "Current Data";
-            current1.Font = new Font("Arial", 18, FontStyle.Underline);
-            current1.Bounds = new Rectangle(23, 294, 300, 30);
+            current1.Font = new Font("Arial", 14, FontStyle.Underline);
+            current1.Bounds = new Rectangle(50, 294, 300, 30);
             Controls.Add(current1);
         }
 
@@ -223,8 +223,8 @@ namespace PLCCompare
         {
             received2 = new Label();
             received2.Text = "Received Data";
-            received2.Font = new Font("Arial", 18, FontStyle.Underline);
-            received2.Bounds = new Rectangle(23, 410, 300, 30);
+            received2.Font = new Font("Arial", 14, FontStyle.Underline);
+            received2.Bounds = new Rectangle(50, 425, 300, 30);
             Controls.Add(received2);
         }
 
@@ -233,8 +233,8 @@ namespace PLCCompare
         {
             current2 = new Label();
             current2.Text = "Current Data";
-            current2.Font = new Font("Arial", 18, FontStyle.Underline);
-            current2.Bounds = new Rectangle(23, 493, 300, 30);
+            current2.Font = new Font("Arial", 14, FontStyle.Underline);
+            current2.Bounds = new Rectangle(50, 508, 300, 30);
             Controls.Add(current2);
         }
 
@@ -243,8 +243,8 @@ namespace PLCCompare
         {
             received3 = new Label();
             received3.Text = "Received Data";
-            received3.Font = new Font("Arial", 18, FontStyle.Underline);
-            received3.Bounds = new Rectangle(23, 611, 300, 30);
+            received3.Font = new Font("Arial", 14, FontStyle.Underline);
+            received3.Bounds = new Rectangle(50, 629, 300, 30);
             Controls.Add(received3);
         }
 
@@ -253,8 +253,8 @@ namespace PLCCompare
         {
             current3 = new Label();
             current3.Text = "Current Data";
-            current3.Font = new Font("Arial", 18, FontStyle.Underline);
-            current3.Bounds = new Rectangle(23, 694, 300, 30);
+            current3.Font = new Font("Arial", 14, FontStyle.Underline);
+            current3.Bounds = new Rectangle(50, 712, 300, 30);
             Controls.Add(current3);
         }
 
@@ -262,7 +262,7 @@ namespace PLCCompare
         private TextBox MakeReadOnlyTextBox(Rectangle bounds)
         {
             var tb = new TextBox();
-            tb.Font = new Font("Arial", 24, FontStyle.Regular);
+            tb.Font = new Font("Arial", 20, FontStyle.Regular);
             tb.ReadOnly = true;
             tb.Bounds = bounds;
             tb.BorderStyle = BorderStyle.FixedSingle;
@@ -271,12 +271,12 @@ namespace PLCCompare
             return tb;
         }
 
-        private void SetText1() => text1 = MakeReadOnlyTextBox(new Rectangle(28, 243, 400, 50));
-        private void SetText2() => text2 = MakeReadOnlyTextBox(new Rectangle(28, 325, 400, 50));
-        private void SetText3() => text3 = MakeReadOnlyTextBox(new Rectangle(28, 443, 400, 50));
-        private void SetText4() => text4 = MakeReadOnlyTextBox(new Rectangle(28, 525, 400, 50));
-        private void SetText5() => text5 = MakeReadOnlyTextBox(new Rectangle(28, 643, 400, 50));
-        private void SetText6() => text6 = MakeReadOnlyTextBox(new Rectangle(28, 727, 400, 50));
+        private void SetText1() => text1 = MakeReadOnlyTextBox(new Rectangle(53, 243, 460, 45));
+        private void SetText2() => text2 = MakeReadOnlyTextBox(new Rectangle(53, 325, 460, 45));
+        private void SetText3() => text3 = MakeReadOnlyTextBox(new Rectangle(53, 458, 460, 45));
+        private void SetText4() => text4 = MakeReadOnlyTextBox(new Rectangle(53, 540, 460, 45));
+        private void SetText5() => text5 = MakeReadOnlyTextBox(new Rectangle(53, 661, 460, 45));
+        private void SetText6() => text6 = MakeReadOnlyTextBox(new Rectangle(53, 745, 460, 45));
 
         // Match 1
         private void SetMatch1()
@@ -374,7 +374,8 @@ namespace PLCCompare
             count1 = new Label();
             count1.Text = "0";
             count1.Font = new Font("Arial", 60, FontStyle.Bold);
-            count1.Bounds = new Rectangle(630, 50, 350, 100);
+            count1.Bounds = new Rectangle(500, 50, 350, 100);
+            count1.TextAlign = ContentAlignment.MiddleCenter;
             Controls.Add(count1);
         }
 
@@ -384,7 +385,8 @@ namespace PLCCompare
             count2 = new Label();
             count2.Text = "0";
             count2.Font = new Font("Arial", 60, FontStyle.Bold);
-            count2.Bounds = new Rectangle(1163, 50, 350, 100);
+            count2.Bounds = new Rectangle(1035, 50, 350, 100);
+            count2.TextAlign = ContentAlignment.MiddleCenter;
             Controls.Add(count2);
         }
 
