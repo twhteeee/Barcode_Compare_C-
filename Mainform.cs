@@ -152,7 +152,7 @@ namespace PLCCompare
             label3.Text = "Rank 2";
             label3.Font = new Font("Arial", 18, FontStyle.Bold);
             label3.ForeColor = Color.Black;
-            label3.Bounds = new Rectangle(50, 600, 320, 33);
+            label3.Bounds = new Rectangle(50, 599, 320, 32);
             Controls.Add(label3);
         }
 
@@ -244,7 +244,7 @@ namespace PLCCompare
             received3 = new Label();
             received3.Text = "Received Data";
             received3.Font = new Font("Arial", 14, FontStyle.Underline);
-            received3.Bounds = new Rectangle(50, 629, 300, 30);
+            received3.Bounds = new Rectangle(50, 632, 300, 30);
             Controls.Add(received3);
         }
 
@@ -297,7 +297,7 @@ namespace PLCCompare
         private void SetText2() => text2 = MakeReadOnlyTextBox(new Rectangle(55, 325, 460, 45));
         private void SetText3() => text3 = MakeReadOnlyTextBox(new Rectangle(55, 458, 460, 45));
         private void SetText4() => text4 = MakeReadOnlyTextBox(new Rectangle(55, 540, 460, 45));
-        private void SetText5() => text5 = MakeReadOnlyTextBox(new Rectangle(55, 661, 460, 45));
+        private void SetText5() => text5 = MakeReadOnlyTextBox(new Rectangle(55, 663, 460, 45));
         private void SetText6() => text6 = MakeReadOnlyTextBox(new Rectangle(55, 745, 460, 45));
 
         // Match 1
