@@ -162,7 +162,7 @@ namespace PLCCompare
             dateLabel = new Label();
             dateLabel.Font = new Font("Arial", 20, FontStyle.Bold);
             dateLabel.ForeColor = Color.Black;
-            dateLabel.Bounds = new Rectangle(20, 140, 250, 50);
+            dateLabel.Bounds = new Rectangle(53, 140, 250, 50);
             Controls.Add(dateLabel);
             UpdateDate();
         }
@@ -271,12 +271,12 @@ namespace PLCCompare
             return tb;
         }
 
-        private void SetText1() => text1 = MakeReadOnlyTextBox(new Rectangle(53, 243, 460, 45));
-        private void SetText2() => text2 = MakeReadOnlyTextBox(new Rectangle(53, 325, 460, 45));
-        private void SetText3() => text3 = MakeReadOnlyTextBox(new Rectangle(53, 458, 460, 45));
-        private void SetText4() => text4 = MakeReadOnlyTextBox(new Rectangle(53, 540, 460, 45));
-        private void SetText5() => text5 = MakeReadOnlyTextBox(new Rectangle(53, 661, 460, 45));
-        private void SetText6() => text6 = MakeReadOnlyTextBox(new Rectangle(53, 745, 460, 45));
+        private void SetText1() => text1 = MakeReadOnlyTextBox(new Rectangle(55, 243, 460, 45));
+        private void SetText2() => text2 = MakeReadOnlyTextBox(new Rectangle(55, 325, 460, 45));
+        private void SetText3() => text3 = MakeReadOnlyTextBox(new Rectangle(55, 458, 460, 45));
+        private void SetText4() => text4 = MakeReadOnlyTextBox(new Rectangle(55, 540, 460, 45));
+        private void SetText5() => text5 = MakeReadOnlyTextBox(new Rectangle(55, 661, 460, 45));
+        private void SetText6() => text6 = MakeReadOnlyTextBox(new Rectangle(55, 745, 460, 45));
 
         // Match 1
         private void SetMatch1()
@@ -285,7 +285,7 @@ namespace PLCCompare
             match1.Text = "Match";
             match1.Font = new Font("Arial", 24, FontStyle.Bold);
             match1.ForeColor = Color.Black;
-            match1.Bounds = new Rectangle(1040, 380, 320, 30);
+            match1.Bounds = new Rectangle(940, 390, 320, 33);
             Controls.Add(match1);
         }
 
@@ -296,14 +296,14 @@ namespace PLCCompare
             match2.Text = "Match";
             match2.Font = new Font("Arial", 24, FontStyle.Bold);
             match2.ForeColor = Color.Black;
-            match2.Bounds = new Rectangle(1040, 580, 320, 30);
+            match2.Bounds = new Rectangle(940, 590, 320, 33);
             Controls.Add(match2);
         }
 
         // Condition 1
         private void SetCondition1() {
             var panel = new Panel();
-            panel.Bounds = new Rectangle(1045, 420, 100, 100);
+            panel.Bounds = new Rectangle(945, 430, 100, 100);
             panel.Padding = new Padding(2); // matches the border thickness below
             panel.Paint += (s, e) =>
             {
@@ -327,7 +327,7 @@ namespace PLCCompare
         // Condition 2
         private void SetCondition2() {
             var panel = new Panel();
-            panel.Bounds = new Rectangle(1045, 620, 100, 100);
+            panel.Bounds = new Rectangle(945, 630, 100, 100);
             panel.Padding = new Padding(2);
             panel.Paint += (s, e) =>
             {
@@ -354,7 +354,7 @@ namespace PLCCompare
             scanning1 = new Label();
             scanning1.Text = "Rank 1 Counter";
             scanning1.Font = new Font("Arial", 24, FontStyle.Bold);
-            scanning1.Bounds = new Rectangle(550, 10, 300, 35);
+            scanning1.Bounds = new Rectangle(600, 10, 300, 35);
             Controls.Add(scanning1);
         }
 
@@ -374,7 +374,7 @@ namespace PLCCompare
             count1 = new Label();
             count1.Text = "0";
             count1.Font = new Font("Arial", 60, FontStyle.Bold);
-            count1.Bounds = new Rectangle(500, 50, 350, 100);
+            count1.Bounds = new Rectangle(550, 50, 350, 100);
             count1.TextAlign = ContentAlignment.MiddleCenter;
             Controls.Add(count1);
         }
@@ -398,7 +398,7 @@ namespace PLCCompare
             reset.Font = new Font("Arial", 16, FontStyle.Bold);
             reset.ForeColor = Color.Black;
             reset.BackColor = Color.White;
-            reset.Bounds = new Rectangle(590, 170, 160, 50);
+            reset.Bounds = new Rectangle(640, 170, 160, 50);
             reset.TextAlign = ContentAlignment.MiddleCenter;
             Controls.Add(reset);
         }
@@ -408,7 +408,7 @@ namespace PLCCompare
         {
             status = new Label();
             status.Font = new Font("Arial", 12, FontStyle.Bold);
-            status.Bounds = new Rectangle(25, 90, 400, 20);
+            status.Bounds = new Rectangle(53, 90, 400, 20);
             Controls.Add(status);
         }
 
@@ -417,7 +417,7 @@ namespace PLCCompare
         {
             plcStatus = new Label();
             plcStatus.Font = new Font("Arial", 12, FontStyle.Bold);
-            plcStatus.Bounds = new Rectangle(25, 115, 400, 20);
+            plcStatus.Bounds = new Rectangle(53, 115, 400, 20);
             Controls.Add(plcStatus);
         }
     }
