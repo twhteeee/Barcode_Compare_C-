@@ -40,7 +40,7 @@ namespace PLCCompare
         private const string Rank1Port = "COM5";
         private const string Rank2Port = "COM6";
 
-        public FrameController(MainForm ui)
+         public FrameController(MainForm ui)
         {
             this.ui = ui;
 
@@ -84,7 +84,7 @@ namespace PLCCompare
 
         private void OnRank1Received(string value)
         {
-            if (value != "Error" && !IsBatchNoScanned())
+            if (!IsBatchNoScanned())
             {
                 return; // Block the scan, no compare
             }
@@ -127,7 +127,7 @@ namespace PLCCompare
 
         private void OnRank2Received(string value)
         {
-            if (value != "Error" && !IsBatchNoScanned())
+            if (!IsBatchNoScanned())
             {
                 return; // Block the scan, no compare
             }
@@ -335,14 +335,6 @@ namespace PLCCompare
                     }
                     catch (TimeoutException)
                     {
-                        // No data within the timeout window — this is just idle, not an error.
-                        // IMPORTANT DIFFERENCE FROM THE JAVA VERSION:
-                        // .NET's SerialPort has no dedicated "port physically disconnected" event
-                        // like jSerialComm's LISTENING_EVENT_PORT_DISCONNECTED. As a practical
-                        // substitute, we check the OS's live port list here. This is the same
-                        // "poll and guess" approach we moved away from on the Java side — it's
-                        // the best broadly-available option in stock .NET, but can occasionally
-                        // lag behind a real unplug event, same caveat as before.
                         if (!IsPortStillPresent(portName))
                         {
                             break;
@@ -352,6 +344,8 @@ namespace PLCCompare
                     catch (Exception ex)
                     {
                         Console.WriteLine("Scan error on " + portName + ": " + ex.Message);
+
+                        Thread.Sleep(300);
 
                         if (!IsPortStillPresent(portName))
                         {
@@ -556,7 +550,7 @@ namespace PLCCompare
             ConnectionStatus(); // refresh the label after every retry attempt
         }
 
-        // Rank 1 and 2 cannot have a value before Batch No is scanned
+         // Rank 1 and 2 cannot have a value before Batch No is scanned
         private int batchNoWarningVisible = 0; // 0 = not showing, 1 = currently showing
 
         private bool IsBatchNoScanned()

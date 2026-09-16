@@ -36,16 +36,9 @@ namespace PLCCompare
         private volatile bool keepRunning = false;
         private Thread monitorThread;
 
-        public bool IsConnected
-        {
-            get
-            {
-            lock (plcLock)
-            {
-            return client != null && client.Connected && IsSocketReallyConnected();
-            }
-        }
-    }
+        private volatile bool isConnectedFlag = false;
+
+        public bool IsConnected => isConnectedFlag; // instant, lock-free — safe to call from the UI thread anytime
 
         /// <summary>
         /// Starts the connection and a background monitor thread that keeps checking
@@ -59,9 +52,17 @@ namespace PLCCompare
             {
                 while (keepRunning)
                 {
-                    if (!IsConnected)
+                    bool currentlyConnected;
+                    lock (plcLock)
                     {
-                        TryConnectOnce();
+                        currentlyConnected = client != null && client.Connected && IsSocketReallyConnected();
+                    }
+                    isConnectedFlag = currentlyConnected;
+
+                    if (!currentlyConnected)
+                    {
+                        TryConnectOnce(); // still holds plcLock internally, but only this
+                                        // background thread ever waits on it now
                     }
                     Thread.Sleep(retryIntervalMs);
                 }
@@ -90,6 +91,7 @@ namespace PLCCompare
                         // connection periodically, so a silently-dead peer (cable pull,
                         // PLC power loss) gets detected instead of looking "connected" forever.
                         client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+                        isConnectedFlag = true;
 
                         // Customize the keepalive timing so a hard disconnect (cable pull, power loss) in few second
                         byte[] keepAliveValues = new byte[12];

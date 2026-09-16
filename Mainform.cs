@@ -23,15 +23,20 @@ namespace PLCCompare
         internal Label plcStatus;
 
         private System.Windows.Forms.Timer clockTimer;
+        private static readonly Size DesignSize = new Size(1500, 800);
+        private LayoutScaler scaler;
 
         public MainForm()
         {
             AutoScaleMode = AutoScaleMode.None;
+            DoubleBuffered = true; 
 
             Text = "Wenglor Barcode Logging System";
-            Size = new Size(1500, 800);
+            ClientSize = DesignSize;
             StartPosition = FormStartPosition.CenterScreen;
             FormBorderStyle = FormBorderStyle.Sizable;
+            MaximizeBox = true;
+            MinimizeBox = true;
 
             SetLogo();
             SetLabel1();
@@ -68,16 +73,37 @@ namespace PLCCompare
             SetResetButton();
             SetStatus();
             SetPlcStatus();
+
+            scaler = new LayoutScaler(this, DesignSize);
+            scaler.Capture();
+            Load += (s, e) => LayoutScaler.FitToScreen(this, DesignSize);
         }
 
         // Logo
         private void SetLogo()
         {
             logo = new PictureBox();
-            logo.Image = Image.FromFile(@"C:\Barcode_Compare\IconWenglor.png");
+            logo.Image = LoadEmbeddedImage("IconWenglor.png");
             logo.SizeMode = PictureBoxSizeMode.StretchImage;
             logo.Bounds = new Rectangle(25, 5, 420, 80);
             Controls.Add(logo);
+        }
+
+        private Image LoadEmbeddedImage(string fileName)
+        {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+
+            // Embedded resource names are "<DefaultNamespace>.<FileName>" by default
+            string resourceName = assembly.GetName().Name + "." + fileName;
+
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    throw new Exception($"Embedded resource not found: {resourceName}. Check the exact resource name using assembly.GetManifestResourceNames().");
+                }
+                return Image.FromStream(stream);
+            }
         }
 
         // Batch No
@@ -87,7 +113,7 @@ namespace PLCCompare
             label1.Text = "Batch No";
             label1.Font = new Font("Arial", 24, FontStyle.Bold);
             label1.ForeColor = Color.Black;
-            label1.Bounds = new Rectangle(20, 180, 320, 30);
+            label1.Bounds = new Rectangle(20, 175, 320, 33);
             Controls.Add(label1);
         }
 
@@ -98,7 +124,7 @@ namespace PLCCompare
             label2.Text = "Rank 1";
             label2.Font = new Font("Arial", 24, FontStyle.Bold);
             label2.ForeColor = Color.Black;
-            label2.Bounds = new Rectangle(20, 375, 320, 30);
+            label2.Bounds = new Rectangle(20, 380, 320, 33);
             Controls.Add(label2);
         }
 
@@ -109,7 +135,7 @@ namespace PLCCompare
             label3.Text = "Rank 2";
             label3.Font = new Font("Arial", 24, FontStyle.Bold);
             label3.ForeColor = Color.Black;
-            label3.Bounds = new Rectangle(20, 575, 320, 30);
+            label3.Bounds = new Rectangle(20, 578, 320, 33);
             Controls.Add(label3);
         }
 
@@ -171,7 +197,7 @@ namespace PLCCompare
             current1 = new Label();
             current1.Text = "Current Data";
             current1.Font = new Font("Arial", 18, FontStyle.Underline);
-            current1.Bounds = new Rectangle(23, 290, 300, 30);
+            current1.Bounds = new Rectangle(23, 295, 300, 30);
             Controls.Add(current1);
         }
 
@@ -181,7 +207,7 @@ namespace PLCCompare
             received2 = new Label();
             received2.Text = "Received Data";
             received2.Font = new Font("Arial", 18, FontStyle.Underline);
-            received2.Bounds = new Rectangle(23, 408, 300, 30);
+            received2.Bounds = new Rectangle(23, 413, 300, 30);
             Controls.Add(received2);
         }
 
@@ -191,7 +217,7 @@ namespace PLCCompare
             current2 = new Label();
             current2.Text = "Current Data";
             current2.Font = new Font("Arial", 18, FontStyle.Underline);
-            current2.Bounds = new Rectangle(23, 485, 300, 30);
+            current2.Bounds = new Rectangle(23, 493, 300, 30);
             Controls.Add(current2);
         }
 
@@ -201,7 +227,7 @@ namespace PLCCompare
             received3 = new Label();
             received3.Text = "Received Data";
             received3.Font = new Font("Arial", 18, FontStyle.Underline);
-            received3.Bounds = new Rectangle(23, 605, 300, 30);
+            received3.Bounds = new Rectangle(23, 611, 300, 30);
             Controls.Add(received3);
         }
 
@@ -211,7 +237,7 @@ namespace PLCCompare
             current3 = new Label();
             current3.Text = "Current Data";
             current3.Font = new Font("Arial", 18, FontStyle.Underline);
-            current3.Bounds = new Rectangle(23, 682, 300, 30);
+            current3.Bounds = new Rectangle(23, 694, 300, 30);
             Controls.Add(current3);
         }
 
@@ -223,16 +249,17 @@ namespace PLCCompare
             tb.ReadOnly = true;
             tb.Bounds = bounds;
             tb.BorderStyle = BorderStyle.FixedSingle;
+            tb.Multiline = true;
             Controls.Add(tb);
             return tb;
         }
 
         private void SetText1() => text1 = MakeReadOnlyTextBox(new Rectangle(28, 243, 400, 50));
-        private void SetText2() => text2 = MakeReadOnlyTextBox(new Rectangle(28, 320, 400, 50));
-        private void SetText3() => text3 = MakeReadOnlyTextBox(new Rectangle(28, 438, 400, 50));
-        private void SetText4() => text4 = MakeReadOnlyTextBox(new Rectangle(28, 515, 400, 50));
-        private void SetText5() => text5 = MakeReadOnlyTextBox(new Rectangle(28, 635, 400, 50));
-        private void SetText6() => text6 = MakeReadOnlyTextBox(new Rectangle(28, 712, 400, 50));
+        private void SetText2() => text2 = MakeReadOnlyTextBox(new Rectangle(28, 325, 400, 50));
+        private void SetText3() => text3 = MakeReadOnlyTextBox(new Rectangle(28, 443, 400, 50));
+        private void SetText4() => text4 = MakeReadOnlyTextBox(new Rectangle(28, 525, 400, 50));
+        private void SetText5() => text5 = MakeReadOnlyTextBox(new Rectangle(28, 643, 400, 50));
+        private void SetText6() => text6 = MakeReadOnlyTextBox(new Rectangle(28, 724, 400, 50));
 
         // Match 1
         private void SetMatch1()
