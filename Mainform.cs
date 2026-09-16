@@ -353,8 +353,8 @@ namespace PLCCompare
         {
             scanning1 = new Label();
             scanning1.Text = "Rank 1 Counter";
-            scanning1.Font = new Font("Arial", 18, FontStyle.Underline);
-            scanning1.Bounds = new Rectangle(550, 10, 200, 30);
+            scanning1.Font = new Font("Arial", 24, FontStyle.Bold);
+            scanning1.Bounds = new Rectangle(550, 10, 300, 35);
             Controls.Add(scanning1);
         }
 
@@ -363,8 +363,8 @@ namespace PLCCompare
         {
             scanning2 = new Label();
             scanning2.Text = "Rank 2 Counter";
-            scanning2.Font = new Font("Arial", 18, FontStyle.Underline);
-            scanning2.Bounds = new Rectangle(1000, 10, 200, 30);
+            scanning2.Font = new Font("Arial", 24, FontStyle.Bold);
+            scanning2.Bounds = new Rectangle(1080, 10, 300, 35);
             Controls.Add(scanning2);
         }
 
@@ -374,7 +374,7 @@ namespace PLCCompare
             count1 = new Label();
             count1.Text = "0";
             count1.Font = new Font("Arial", 60, FontStyle.Bold);
-            count1.Bounds = new Rectangle(595, 30, 200, 100);
+            count1.Bounds = new Rectangle(630, 50, 350, 100);
             Controls.Add(count1);
         }
 
@@ -384,7 +384,7 @@ namespace PLCCompare
             count2 = new Label();
             count2.Text = "0";
             count2.Font = new Font("Arial", 60, FontStyle.Bold);
-            count2.Bounds = new Rectangle(1045, 30, 200, 100);
+            count2.Bounds = new Rectangle(1163, 50, 350, 100);
             Controls.Add(count2);
         }
 
@@ -396,7 +396,7 @@ namespace PLCCompare
             reset.Font = new Font("Arial", 16, FontStyle.Bold);
             reset.ForeColor = Color.Black;
             reset.BackColor = Color.White;
-            reset.Bounds = new Rectangle(555, 130, 160, 50);
+            reset.Bounds = new Rectangle(590, 170, 160, 50);
             reset.TextAlign = ContentAlignment.MiddleCenter;
             Controls.Add(reset);
         }
