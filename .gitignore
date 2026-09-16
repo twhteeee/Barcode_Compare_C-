@@ -27,7 +27,7 @@ publish/
 # be shared across different deployment machines via source control
 config.json
 
-# Installer output
+# Installer output and script (machine-specific paths, not meant to be shared)
 Output/
 *.exe
-!installer.iss
+installer.iss
