@@ -343,9 +343,9 @@ namespace PLCCompare
         {
             match1 = new Label();
             match1.Text = "Match";
-            match1.Font = new Font("Arial", 40, FontStyle.Bold);
+            match1.Font = new Font("Arial", 50, FontStyle.Bold);
             match1.ForeColor = Color.Black;
-            match1.Bounds = new Rectangle(945, 240, 320, 50);
+            match1.Bounds = new Rectangle(915, 225, 320, 65);
             Controls.Add(match1);
         }
 
@@ -354,16 +354,16 @@ namespace PLCCompare
         {
             match2 = new Label();
             match2.Text = "Match";
-            match2.Font = new Font("Arial", 40, FontStyle.Bold);
+            match2.Font = new Font("Arial", 50, FontStyle.Bold);
             match2.ForeColor = Color.Black;
-            match2.Bounds = new Rectangle(945, 500, 320, 50);
+            match2.Bounds = new Rectangle(915, 535, 320, 65);
             Controls.Add(match2);
         }
 
         // Condition 1
         private void SetCondition1() {
             var panel = new Panel();
-            panel.Bounds = new Rectangle(945, 300, 180, 180);
+            panel.Bounds = new Rectangle(945, 300, 160, 160);
             panel.Padding = new Padding(2); // matches the border thickness below
             panel.Paint += (s, e) =>
             {
@@ -387,7 +387,7 @@ namespace PLCCompare
         // Condition 2
         private void SetCondition2() {
             var panel = new Panel();
-            panel.Bounds = new Rectangle(945, 560, 180, 180);
+            panel.Bounds = new Rectangle(945, 610, 160, 160);
             panel.Padding = new Padding(2);
             panel.Paint += (s, e) =>
             {
