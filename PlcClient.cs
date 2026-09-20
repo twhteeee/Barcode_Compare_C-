@@ -45,7 +45,7 @@ namespace PLCCompare
         /// health and auto-reconnecting forever — whether the PLC was unreachable at
         /// startup, or drops mid-session. Call this once instead of Connect().
         /// </summary>
-        public void StartAutoConnect(int retryIntervalMs = 3000)
+        public void StartAutoConnect(int retryIntervalMs = 1000)
         {
             keepRunning = true;
             monitorThread = new Thread(() =>
@@ -96,8 +96,8 @@ namespace PLCCompare
                         // Customize the keepalive timing so a hard disconnect (cable pull, power loss) in few second
                         byte[] keepAliveValues = new byte[12];
                         BitConverter.GetBytes(1).CopyTo(keepAliveValues, 0);    // enable
-                        BitConverter.GetBytes(1000).CopyTo(keepAliveValues, 4); // time before first probe (ms)
-                        BitConverter.GetBytes(1000).CopyTo(keepAliveValues, 8); // interval between probes (ms)
+                        BitConverter.GetBytes(500).CopyTo(keepAliveValues, 4); // time before first probe (ms)
+                        BitConverter.GetBytes(500).CopyTo(keepAliveValues, 8); // interval between probes (ms)
                         client.Client.IOControl(IOControlCode.KeepAliveValues, keepAliveValues, null);
                         Log("Connected to PLC.");
                     }

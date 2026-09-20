@@ -343,9 +343,9 @@ namespace PLCCompare
         {
             match1 = new Label();
             match1.Text = "Match";
-            match1.Font = new Font("Arial", 24, FontStyle.Bold);
+            match1.Font = new Font("Arial", 40, FontStyle.Bold);
             match1.ForeColor = Color.Black;
-            match1.Bounds = new Rectangle(975, 260, 320, 33);
+            match1.Bounds = new Rectangle(945, 240, 320, 50);
             Controls.Add(match1);
         }
 
@@ -354,9 +354,9 @@ namespace PLCCompare
         {
             match2 = new Label();
             match2.Text = "Match";
-            match2.Font = new Font("Arial", 24, FontStyle.Bold);
+            match2.Font = new Font("Arial", 40, FontStyle.Bold);
             match2.ForeColor = Color.Black;
-            match2.Bounds = new Rectangle(975, 520, 320, 33);
+            match2.Bounds = new Rectangle(945, 500, 320, 50);
             Controls.Add(match2);
         }
 
@@ -375,7 +375,7 @@ namespace PLCCompare
             Controls.Add(panel);
 
             condition1 = new Label();
-            condition1.Font = new Font("Arial", 32, FontStyle.Bold);
+            condition1.Font = new Font("Arial", 55, FontStyle.Bold);
             condition1.TextAlign = ContentAlignment.MiddleCenter;
             condition1.BorderStyle = BorderStyle.None; // panel now draws the border instead
             condition1.BackColor = Color.White;
@@ -399,7 +399,7 @@ namespace PLCCompare
             Controls.Add(panel);
 
             condition2 = new Label();
-            condition2.Font = new Font("Arial", 32, FontStyle.Bold);
+            condition2.Font = new Font("Arial", 55, FontStyle.Bold);
             condition2.TextAlign = ContentAlignment.MiddleCenter;
             condition2.BorderStyle = BorderStyle.None;
             condition2.BackColor = Color.White;

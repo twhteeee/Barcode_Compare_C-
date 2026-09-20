@@ -667,7 +667,7 @@ namespace PLCCompare
         // Check PLC Status
         private void StartPlcStatusTimer()
         {
-            var plcStatusTimer = new System.Windows.Forms.Timer { Interval = 1000 };
+            var plcStatusTimer = new System.Windows.Forms.Timer { Interval = 500 };
             plcStatusTimer.Tick += (s, e) => UpdatePlcStatus();
             plcStatusTimer.Start();
         }
