@@ -122,7 +122,7 @@ namespace PLCCompare
 
             count1++;
             ui.count1.Text = count1.ToString();
-            plc.WritePlcWordAscii("D", 60, count1.ToString(), 6);
+            plc.WritePlcWordAscii("D", 60, count1.ToString(), 8);
             rank1DataLogger.LogComparison(batchNo, rank1, status);
         }
 
@@ -166,7 +166,7 @@ namespace PLCCompare
 
             count2++;
             ui.count2.Text = count2.ToString();
-            plc.WritePlcWordAscii("D", 66, count2.ToString(), 6);
+            plc.WritePlcWordAscii("D", 69, count2.ToString(), 8);
             rank2DataLogger.LogComparison(batchNo, rank2, status);
         }
 

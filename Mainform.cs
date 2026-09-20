@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace PLCCompare
 {
@@ -258,9 +259,6 @@ namespace PLCCompare
             Controls.Add(current3);
         }
 
-        // Shared helper — equivalent of your repeated setTextX() blocks.
-        // Wraps the textbox in a frame that paints a black sunken bevel (dark top/left,
-        // lighter bottom/right), since TextBox's own Fixed3D border can't be recolored.
         private TextBox MakeReadOnlyTextBox(Rectangle bounds)
         {
             var frame = new Panel();
@@ -287,10 +285,50 @@ namespace PLCCompare
             tb.Font = new Font("Arial", 20, FontStyle.Regular);
             tb.ReadOnly = true;
             tb.BorderStyle = BorderStyle.None;
+            // Multiline so the control actually fills the whole frame (a single-line
+            // TextBox forces its own height back to one text line regardless of Dock,
+            // leaving the frame's background showing below it). EM_SETRECT below then
+            // pushes the text down so it renders vertically centered, left-aligned.
             tb.Multiline = true;
             tb.Dock = DockStyle.Fill;
+
+            EventHandler centerTextVertically = (s, e) =>
+            {
+                if (!tb.IsHandleCreated) return;
+                // Font.Height (the actual line-spacing metric, same one TextBox uses
+                // internally for its own PreferredHeight) is used here rather than
+                // TextRenderer.MeasureText, which pads its result enough to leave
+                // almost no visible offset to center with.
+                int textHeight = tb.Font.Height;
+                int top = Math.Max(0, (tb.ClientSize.Height - textHeight) / 2);
+                var rect = new NativeMethods.RECT { Left = 0, Top = top, Right = tb.ClientSize.Width, Bottom = tb.ClientSize.Height };
+                NativeMethods.SendMessage(tb.Handle, NativeMethods.EM_SETRECT, IntPtr.Zero, ref rect);
+                tb.Invalidate();
+            };
+            tb.HandleCreated += centerTextVertically;
+            tb.SizeChanged += centerTextVertically;
+            // LayoutScaler swaps in a rescaled Font on every window resize, and
+            // assigning a TextBox's Font sends a native WM_SETFONT message that
+            // silently resets EM_SETRECT back to the default top-aligned rectangle.
+            // Without this, the centering only ever held until the first resize.
+            tb.FontChanged += centerTextVertically;
+
             frame.Controls.Add(tb);
             return tb;
+        }
+
+        // EM_SETRECT lets a multiline edit control's text be pushed down within its
+        // client area, which is how a single line of text is made to sit vertically
+        // centered instead of stuck to the top (WinForms exposes no such property).
+        private static class NativeMethods
+        {
+            public const int EM_SETRECT = 0xB3;
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct RECT { public int Left, Top, Right, Bottom; }
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto)]
+            public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, ref RECT lParam);
         }
 
         private void SetText1() => text1 = MakeReadOnlyTextBox(new Rectangle(55, 243, 460, 45));
@@ -307,7 +345,7 @@ namespace PLCCompare
             match1.Text = "Match";
             match1.Font = new Font("Arial", 24, FontStyle.Bold);
             match1.ForeColor = Color.Black;
-            match1.Bounds = new Rectangle(940, 390, 320, 33);
+            match1.Bounds = new Rectangle(975, 260, 320, 33);
             Controls.Add(match1);
         }
 
@@ -318,14 +356,14 @@ namespace PLCCompare
             match2.Text = "Match";
             match2.Font = new Font("Arial", 24, FontStyle.Bold);
             match2.ForeColor = Color.Black;
-            match2.Bounds = new Rectangle(940, 590, 320, 33);
+            match2.Bounds = new Rectangle(975, 520, 320, 33);
             Controls.Add(match2);
         }
 
         // Condition 1
         private void SetCondition1() {
             var panel = new Panel();
-            panel.Bounds = new Rectangle(945, 430, 100, 100);
+            panel.Bounds = new Rectangle(945, 300, 180, 180);
             panel.Padding = new Padding(2); // matches the border thickness below
             panel.Paint += (s, e) =>
             {
@@ -349,7 +387,7 @@ namespace PLCCompare
         // Condition 2
         private void SetCondition2() {
             var panel = new Panel();
-            panel.Bounds = new Rectangle(945, 630, 100, 100);
+            panel.Bounds = new Rectangle(945, 560, 180, 180);
             panel.Padding = new Padding(2);
             panel.Paint += (s, e) =>
             {
@@ -395,7 +433,7 @@ namespace PLCCompare
         {
             count1 = new Label();
             count1.Text = "0";
-            count1.Font = new Font("Arial", 60, FontStyle.Bold);
+            count1.Font = new Font("Arial", 40, FontStyle.Bold);
             count1.Bounds = new Rectangle(550, 50, 350, 100);
             count1.TextAlign = ContentAlignment.MiddleCenter;
             Controls.Add(count1);
@@ -406,7 +444,7 @@ namespace PLCCompare
         {
             count2 = new Label();
             count2.Text = "0";
-            count2.Font = new Font("Arial", 60, FontStyle.Bold);
+            count2.Font = new Font("Arial", 40, FontStyle.Bold);
             count2.Bounds = new Rectangle(1035, 50, 350, 100);
             count2.TextAlign = ContentAlignment.MiddleCenter;
             Controls.Add(count2);
